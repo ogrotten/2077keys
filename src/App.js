@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {RecoilRoot} from "recoil";
 import { useUploader } from 'react-files-hooks';
 
 function App() {
@@ -23,10 +24,12 @@ function App() {
 	}, [file])
 
 	return (
-		<div>
-			<input {...uploader} id="input" />
-			<button onClick={reset}>Reset</button>
-		</div>
+		<RecoilRoot>
+			<div>
+				<input {...uploader} id="input" />
+				<button onClick={reset}>Reset</button>
+			</div>
+		</RecoilRoot>
 	)
 
 }
