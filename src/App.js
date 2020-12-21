@@ -15,7 +15,6 @@ function App() {
 		onError: error => {
 			console.log(`App.js 11: `, error)
 		},
-		// validTypes: ["text/plain"]
 		validTypes: ["application/json", "application/xml"]
 	});
 
@@ -27,7 +26,6 @@ function App() {
 		<div>
 			<input {...uploader} id="input" />
 			<button onClick={reset}>Reset</button>
-			{console.log(`App.js 24: `, file)}
 		</div>
 	)
 
