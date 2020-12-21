@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { useUploader } from 'react-files-hooks';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [file, setFile] = useState({})
+	const { uploader, reset } = useUploader({
+		onSelectFile: incoming => {
+			setFile(incoming)
+		},
+		onError: error => {
+			console.log(`App.js 11: `, error)
+		},
+		validTypes: ["text/plain"]
+		// validTypes: ["application/json", "application/xml"]
+	});
+
+	useEffect(() => {
+		console.log(file)
+	}, [file])
+
+	return (
+		<div>
+			<input {...uploader} id="input" />
+			<button onClick={reset}>Reset</button>
+			{console.log(`App.js 24: `, file)}
+		</div>
+	)
+
 }
 
 export default App;
