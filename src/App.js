@@ -5,13 +5,18 @@ function App() {
 	const [file, setFile] = useState({})
 	const { uploader, reset } = useUploader({
 		onSelectFile: incoming => {
-			setFile(incoming)
+			const fileReader = new FileReader();
+			fileReader.readAsText(incoming[0], "UTF-8");
+			fileReader.onload = e => {
+				console.log(`App.js 11: `, e)
+				setFile(JSON.parse(e.target.result));
+			};
 		},
 		onError: error => {
 			console.log(`App.js 11: `, error)
 		},
-		validTypes: ["text/plain"]
-		// validTypes: ["application/json", "application/xml"]
+		// validTypes: ["text/plain"]
+		validTypes: ["application/json", "application/xml"]
 	});
 
 	useEffect(() => {
