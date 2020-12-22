@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react'
 import { useRecoilState } from "recoil"
-import { jsonobj, xmlobj } from "./recoil/atoms"
+import { jsonobj, xmlobj } from "../recoil/atoms"
 import { useUploader } from 'react-files-hooks';
 
-import Chooser from "./components/Chooser"
-import Show from "./components/Show"
 
-function App() {
+const Chooser = () => {
 	const [file, setFile] = useRecoilState(jsonobj)
 	const { uploader, reset } = useUploader({
 		onSelectFile: incoming => {
@@ -28,13 +26,11 @@ function App() {
 	}, [file])
 
 	return (
-		<>
-			<Chooser />
-			<br />
-			<Show />
-		</>
+		<div>
+			<input {...uploader} id="input" />
+			<button onClick={reset}>Reset</button>
+		</div>
 	)
-
 }
 
-export default App;
+export default Chooser
