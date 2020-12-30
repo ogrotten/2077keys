@@ -11,12 +11,12 @@ const Show = () => {
 	return (
 		<>
 			{isXML
-				? "XML: Loaded"
-				: "XML: NOT Loaded"}
+				? "inputUserMappings.xml: Loaded"
+				: "inputUserMappings.xml: NOT Loaded"}
 			<p />
 			{isJSON
-				? "JSON: Loaded"
-				: "JSON: NOT Loaded"}
+				? "UserSettings.json: Loaded"
+				: "UserSettings.json: NOT Loaded"}
 		</>
 	)
 }

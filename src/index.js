@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { RecoilRoot } from "recoil";
+import { ChakraProvider } from "@chakra-ui/react"
 
 import App from './App';
 
@@ -11,7 +12,9 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
 	<React.StrictMode>
 		<RecoilRoot>
-			<App />
+			<ChakraProvider>
+				<App />
+			</ChakraProvider>
 		</RecoilRoot>
 	</React.StrictMode>,
 	document.getElementById('root')
