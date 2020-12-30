@@ -1,20 +1,22 @@
 import { selector } from "recoil";
+import { jsonobj, xmlobj } from "./atoms"
 
-import { jsonfilestate } from "./atoms";
-import { getContacts, getDetails } from "../data";
-
-export const jsonfile = selector({
-	key: "jsonfile",
-	get: async () => {
-		const response = await getContacts();
-		return response;
+export const chkJSON = selector({
+	key: "chkJSON",
+	get: ({get}) => {
+		const json = get(jsonobj);
+		console.log(`conlog: `, json)
+		if (json.data !== null) return true;
+		return false
 	},
 });
 
-export const xmlfile = selector({
-	key: "xmlfile",
-	get: async ({ get }) => {
-		const response = await getDetails(get(currentContactState));
-		return response;
+export const chkXML = selector({
+	key: "chkXML",
+	get: ({ get }) => {
+		const xml = get(xmlobj);
+		console.log(`conlog: `, xml)
+		if (xml !== "") return true;
+		return false
 	},
 });
