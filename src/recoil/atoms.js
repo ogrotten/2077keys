@@ -7,5 +7,5 @@ export const jsonobj = atom({
 
 export const xmlobj = atom({
 	key: "xmlobj",
-	default: {},
+	default: "",
 });
