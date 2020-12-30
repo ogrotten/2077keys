@@ -3,14 +3,10 @@ import { useRecoilState } from "recoil"
 import { jsonobj, xmlobj } from "../recoil/atoms"
 
 import { useUploader } from 'react-files-hooks';
-// import {xml2json} from ''
-
 
 const Chooser = () => {
 	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
 	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	const [filetype, setFiletype] = useState("")
-	// const [temp, setTemp] = useState("")
 
 	const { uploader, reset } = useUploader({
 		onSelectFile: incoming => {
@@ -29,24 +25,16 @@ const Chooser = () => {
 		validTypes: ["application/json", "text/xml"]
 	});
 
-	const doFiletype = (e) => {
-		setFiletype(e.target.value)
-	}
-
 	useEffect(() => {
-		console.log(JSONfile)
+		// console.log(JSONfile)
 	}, [JSONfile])
 
 	useEffect(() => {
-		console.log(XMLfile)
+		// console.log(XMLfile)
 	}, [XMLfile])
 
 	return (
 		<div>
-			<div onChange={doFiletype}>
-				<input type="radio" name="filetype" value="JSON" />JSON
-				<input type="radio" name="filetype" value="XML" />XML
-			</div>
 			<input {...uploader} id="input" />
 			<button onClick={reset}>Reset</button>
 		</div>
