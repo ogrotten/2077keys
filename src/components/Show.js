@@ -3,9 +3,10 @@ import { useRecoilState } from "recoil"
 import { jsonobj, xmlobj } from "../recoil/atoms"
 
 const Show = () => {
-	const [data, setData] = useRecoilState(jsonobj)
+	const [JSONfile, setJSONFile] = useRecoilState(jsonobj)
+	const [XMLfile, setXMLFile] = useRecoilState(xmlobj)
 	return (
-		JSON.stringify(data)
+		XMLfile
 	)
 }
 

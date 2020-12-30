@@ -7,7 +7,8 @@ import { useUploader } from 'react-files-hooks';
 
 
 const Chooser = () => {
-	const [file, setFile] = useRecoilState(jsonobj)
+	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
+	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
 	const [filetype, setFiletype] = useState("")
 	// const [temp, setTemp] = useState("")
 
@@ -18,8 +19,8 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				if (current.includes('"version": 65')) setFile(JSON.parse(e.target.result))
-				if (current.includes('xml version="1.0"')) console.log(`conlog: `, e.target.result)
+				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
+				if (current.includes('xml version="1.0"')) {setXMLfile(current); console.log(`conlog: `, XMLfile)}
 			};
 		},
 		onError: error => {
@@ -33,12 +34,12 @@ const Chooser = () => {
 	}
 
 	useEffect(() => {
-		console.log(file)
-	}, [file])
+		console.log(JSONfile)
+	}, [JSONfile])
 
 	useEffect(() => {
-		console.log(filetype)
-	}, [filetype])
+		console.log(XMLfile)
+	}, [XMLfile])
 
 	return (
 		<div>
