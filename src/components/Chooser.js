@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilState } from "recoil"
 import { jsonobj, xmlobj } from "../recoil/atoms"
 
@@ -16,7 +16,7 @@ const Chooser = () => {
 			fileReader.onload = e => {
 				const current = e.target.result
 				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				if (current.includes('xml version="1.0"')) setXMLfile(current); console.log(`conlog: `, XMLfile)
+				if (current.includes('xml version="1.0"')) setXMLfile(current);
 			};
 		},
 		onError: error => {
