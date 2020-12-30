@@ -16,7 +16,13 @@ const Chooser = () => {
 			fileReader.onload = e => {
 				const current = e.target.result
 				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				if (current.includes('xml version="1.0"')) setXMLfile(current);
+				if (current.includes('xml version="1.0"')){
+					if ( current.includes("<!-- MAPPINGS -->")){
+						setXMLfile(current)
+					} else {
+						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
+					}
+				}
 			};
 		},
 		onError: error => {
