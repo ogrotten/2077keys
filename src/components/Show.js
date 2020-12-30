@@ -6,7 +6,15 @@ const Show = () => {
 	const [JSONfile, setJSONFile] = useRecoilState(jsonobj)
 	const [XMLfile, setXMLFile] = useRecoilState(xmlobj)
 	return (
-		XMLfile
+		<>
+			{XMLfile != ""
+				? "XML: Loaded"
+				: "XML: NOT Loaded"}
+			<p />
+			{JSONfile != {}
+				? "JSON: Loaded"
+				: "JSON: NOT Loaded"}
+		</>
 	)
 }
 
