@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState } from "recoil"
 import { jsonobj, xmlobj } from "../recoil/atoms"
+
 import { useUploader } from 'react-files-hooks';
+// import {xml2json} from ''
 
 
 const Chooser = () => {
 	const [file, setFile] = useRecoilState(jsonobj)
 	const [filetype, setFiletype] = useState("")
+	// const [temp, setTemp] = useState("")
 
 	const { uploader, reset } = useUploader({
 		onSelectFile: incoming => {
+			// console.log(`Chooser.js 20: `,incoming[0]);
 			const fileReader = new FileReader();
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
-				// console.log(`App.js 11: `, e)
-				if (filetype = "JSON") setFile(JSON.parse(e.target.result));
-				if (filetype = "XML") setFile(JSON.parse(e.target.result));
+				const current = e.target.result
+				if (current.startsWith()) {}
+				setFile(JSON.parse(e.target.result));
 			};
 		},
 		onError: error => {
@@ -32,9 +36,13 @@ const Chooser = () => {
 		console.log(file)
 	}, [file])
 
+	useEffect(() => {
+		console.log(filetype)
+	}, [filetype])
+
 	return (
 		<div>
-			<div onchange={doFiletype}>
+			<div onChange={doFiletype}>
 				<input type="radio" name="filetype" value="JSON" />JSON
 				<input type="radio" name="filetype" value="XML" />XML
 			</div>
