@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { useRecoilValue } from "recoil"
+import { chkJSON, chkXML } from "./recoil/selectors";
 
 import Chooser from "./components/Chooser"
 import Show from "./components/Show"
@@ -6,6 +8,15 @@ import Show from "./components/Show"
 import { Box, Container, StackDivider, Tabs, TabList, TabPanels, Tab, TabPanel, VStack } from "@chakra-ui/react"
 
 function App() {
+	const [areBoth, setAreBoth] = useState(false)
+
+	const isJSON = useRecoilValue(chkJSON)
+	const isXML = useRecoilValue(chkXML)
+
+	useEffect(() => {
+		setAreBoth(isJSON && isXML)
+	}, [isJSON, isXML])
+
 	return (
 		<Container maxW="xl">
 			<VStack
@@ -14,10 +25,14 @@ function App() {
 				align="stretch"
 			>
 				<Show />
-				<Tabs variant="enclosed-colored">
+				<Tabs variant="line">
 					<TabList>
 						<Tab>Chooser</Tab>
-						<Tab>Editor</Tab>
+						{
+							areBoth
+								? <Tab>Editor</Tab>
+								: <Tab isDisabled>Editor</Tab>
+						}
 					</TabList>
 					<TabPanels>
 						<TabPanel>
