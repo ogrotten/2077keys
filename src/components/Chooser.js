@@ -18,15 +18,14 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				console.log(`conlog: `, current)
 				if (current.includes('"version": 65')) setFile(JSON.parse(e.target.result))
-				// if (current.includes('xml version="1.0"')) console.log(`conlog: `, e.target.result)
+				if (current.includes('xml version="1.0"')) console.log(`conlog: `, e.target.result)
 			};
 		},
 		onError: error => {
-			console.log(`App.js 11: `, error)
+			console.log(`UPLOAD ERROR `, error)
 		},
-		validTypes: ["application/json", "application/xml"]
+		validTypes: ["application/json", "text/xml"]
 	});
 
 	const doFiletype = (e) => {
