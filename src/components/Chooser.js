@@ -4,6 +4,7 @@ import { jsonobj, xmlobj } from "../recoil/atoms"
 import { chkJSON, chkXML } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
+import db from "../data/db"
 
 const Chooser = () => {
 	const [areBoth, setAreBoth] = useState(false)
@@ -22,8 +23,8 @@ const Chooser = () => {
 			fileReader.onload = e => {
 				const current = e.target.result
 				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				if (current.includes('xml version="1.0"')){
-					if ( current.includes("<!-- MAPPINGS -->")){
+				if (current.includes('xml version="1.0"')) {
+					if (current.includes("<!-- MAPPINGS -->")) {
 						setXMLfile(current)
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
@@ -38,8 +39,8 @@ const Chooser = () => {
 	});
 
 	useEffect(() => {
-		// console.log(JSONfile)
-	}, [JSONfile])
+		if (isJSON)	db.json.add({JSONfile})
+	}, [isJSON])
 
 	useEffect(() => {
 		// console.log(XMLfile)
@@ -50,7 +51,7 @@ const Chooser = () => {
 	}, [isJSON, isXML])
 
 	useEffect(() => {
-		areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,) 
+		areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
 	}, [areBoth])
 
 	return (

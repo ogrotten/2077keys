@@ -22,12 +22,12 @@ export const chkXML = selector({
 });
 
 // stump
-export const configStore = selector({
-	key: "configStore",
-	get: async ({ get }) => {
-		const response = await myDBQuery({
-			userID: get(currentUserIDState),
-		});
-		return response.name;
-	},
-})
+// export const dbStore = selector({
+// 	key: "dbStore",
+// 	get: async ({ get }) => {
+// 		const response = await myDBQuery({
+// 			userID: get(currentUserIDState),
+// 		});
+// 		return response.name;
+// 	},
+// })
