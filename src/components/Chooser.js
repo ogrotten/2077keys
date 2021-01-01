@@ -6,6 +6,9 @@ import { chkJSON, chkXML } from "../recoil/selectors";
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
 
+import "./ChooserCards"
+import ChooserCards from './ChooserCards';
+
 const Chooser = () => {
 	const [areBoth, setAreBoth] = useState(false)
 	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
@@ -62,6 +65,7 @@ const Chooser = () => {
 		<div>
 			<input {...uploader} id="input" />
 			<button onClick={reset}>Reset</button>
+			<ChooserCards />
 		</div>
 	)
 }
