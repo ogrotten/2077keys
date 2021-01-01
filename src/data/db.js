@@ -26,8 +26,9 @@ db.readAll = (data) => {
 db.insert = async (data) => {
 	// is this necessary?
 	// const dataString = JSON.parse(JSON.stringify(data))
-	if ((data.xml !== "") && (data.json !== null)) {
+	if ((data.xml !== "") && (data.json.data !== null)) {
 		if ("id" in data) delete data.id
+		data.date = new Date()
 		return await db.config.add(data)
 			.then((x) => {
 				conlog(">>> DB Added:", x)

@@ -53,7 +53,7 @@ const Chooser = () => {
 	useEffect(() => {
 		// areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
 		db.insert({
-			json: JSONfile.data,
+			json: JSONfile,
 			xml: XMLfile
 		})
 	}, [areBoth])
