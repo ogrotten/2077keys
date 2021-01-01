@@ -6,8 +6,20 @@ import { chkJSON, chkXML } from "../recoil/selectors";
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
 
+import {
+	Box,
+	Container,
+	Divider,
+	HStack,
+	Tag,
+	Text,
+	Wrap, WrapItem
+} from "@chakra-ui/react"
+
 const Chooser = () => {
+	const [allconfigs, setAllconfigs] = useState([])
 	const [areBoth, setAreBoth] = useState(false)
+
 	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
 	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
 
@@ -38,6 +50,16 @@ const Chooser = () => {
 		validTypes: ["application/json", "text/xml"]
 	});
 
+	const getall = async () => {
+		let ret = await db.readAll();
+		ret.sort((x, y) => (x.date < y.date ? 1 : -1));
+		setAllconfigs([...ret])
+	};
+
+	useEffect(() => {
+		getall()
+	}, [])
+
 	useEffect(() => {
 		// console.log(`conlog: `, JSONfile)
 	}, [JSONfile])
@@ -59,10 +81,44 @@ const Chooser = () => {
 	}, [areBoth])
 
 	return (
-		<div>
-			<input {...uploader} id="input" />
-			<button onClick={reset}>Reset</button>
-		</div>
+		<Container>
+			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
+				<Text><b>Upload New:</b></Text>
+				<input {...uploader} id="input" />
+			</Box>
+			{allconfigs.map((x) => {
+				return (
+					<Card key={x.id} props={x} />
+				)
+				// return x.id
+			})}
+		</Container>
+	)
+}
+
+const Card = (props) => {
+	const [data, setData] = useState(props.props)
+
+	useEffect(() => {
+		const dt = new Date(data.date)
+		const ops =
+			setData({
+				...data,
+				carddate: dt.toDateString(),
+				// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
+				cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
+			})
+	}, [])
+
+	return (
+		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
+			<HStack spacing={4}>
+				<Tag variant="subtle" colorScheme="cyan" size="sm">option</Tag>
+				<Tag variant="subtle" colorScheme="cyan" size="sm">array</Tag>
+			</HStack>
+			<Divider mt={2} mb={2} />
+			<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
+		</Box>
 	)
 }
 
