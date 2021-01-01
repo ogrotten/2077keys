@@ -18,37 +18,6 @@ import {
 
 const ChooserCards = () => {
 	const [allconfigs, setAllconfigs] = useState([])
-	const [areBoth, setAreBoth] = useState(false)
-
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-
-	const isJSON = useRecoilValue(chkJSON)
-	const isXML = useRecoilValue(chkXML)
-
-
-	const { uploader, reset } = useUploader({
-		onSelectFile: incoming => {
-			// console.log(`Chooser.js 20: `,incoming[0]);
-			const fileReader = new FileReader();
-			fileReader.readAsText(incoming[0], "UTF-8");
-			fileReader.onload = e => {
-				const current = e.target.result
-				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				if (current.includes('xml version="1.0"')) {
-					if (current.includes("<!-- MAPPINGS -->")) {
-						setXMLfile(current)
-					} else {
-						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
-					}
-				}
-			};
-		},
-		onError: error => {
-			console.error(`UPLOAD: Neither JSON nor XML.\n\n`, error)
-		},
-		validTypes: ["application/json", "text/xml"]
-	});
 
 	const getall = async () => {
 		let ret = await db.readAll();
@@ -63,7 +32,6 @@ const ChooserCards = () => {
 	return <Container>
 		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
 			<Text><b>Upload New:</b></Text>
-			<input {...uploader} id="input" />
 		</Box>
 		{allconfigs.map((x) => {
 			return (
