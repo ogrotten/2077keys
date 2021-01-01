@@ -20,3 +20,14 @@ export const chkXML = selector({
 		return false
 	},
 });
+
+// stump
+// export const dbStore = selector({
+// 	key: "dbStore",
+// 	get: async ({ get }) => {
+// 		const response = await myDBQuery({
+// 			userID: get(currentUserIDState),
+// 		});
+// 		return response.name;
+// 	},
+// })
