@@ -39,8 +39,8 @@ const Chooser = () => {
 	});
 
 	useEffect(() => {
-		if (isJSON)	db.json.add({JSONfile})
-	}, [isJSON])
+		// console.log(`conlog: `, JSONfile)
+	}, [JSONfile])
 
 	useEffect(() => {
 		// console.log(XMLfile)
@@ -51,7 +51,11 @@ const Chooser = () => {
 	}, [isJSON, isXML])
 
 	useEffect(() => {
-		areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
+		// areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
+		db.insert({
+			json: JSONfile.data,
+			xml: XMLfile
+		})
 	}, [areBoth])
 
 	return (
