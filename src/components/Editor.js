@@ -1,6 +1,6 @@
-import React from 'react'
+// import React from 'react'
 
-// import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { useRecoilState, useRecoilValue } from "recoil"
 // import { jsonobj, xmlobj } from "../recoil/atoms"
 // import { chkJSON, chkXML } from "../recoil/selectors";
@@ -30,6 +30,30 @@ import { UpDownIcon } from '@chakra-ui/icons'
 const features = require("../features")
 
 const Editor = () => {
+	const [isDisabled, setIsDisabled] = useState(() => {
+		const arr = []
+		arr.length = features.default.length
+		return arr.fill(true, 0)
+	})
+
+	const toggleRow = i => {
+		setIsDisabled(() => {
+			const disArr = isDisabled.map((item, j) => {
+				if (j === i) {
+					return !item
+					// if (item=true) {
+					// 	return false
+					// } else {
+					// 	return true
+					// }
+				} else {
+					return item
+				}
+			})
+			// console.log(`conlog: `, disArr)
+			return disArr
+		})
+	}
 
 	return (
 		<Table variant="simple" w="100%">
@@ -44,24 +68,29 @@ const Editor = () => {
 			<Tbody size="sm">
 				{features.default.map((feature, i) => {
 					const item = feature.feature
+					console.log(`conlog: ${i}`, isDisabled[i])
 					return (
 						<Tr key={item.checkbox}>
-							<Td><Checkbox>{item.checkbox}</Checkbox></Td>
+							<Td><Checkbox
+								onClick={() => {
+									toggleRow(i)
+								}}
+							>{item.checkbox}</Checkbox></Td>
 							<Td pb={0} mb={0}>
 								<VStack>
 									<InputGroup>
 										<InputLeftAddon children={item.parameter.before} />
-										<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
+										<Input isDisabled={isDisabled[i]} size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
 										<InputRightAddon children={item.parameter.after} />
 									</InputGroup>
 									<Accordion allowToggle w="100%" borderBottom="0px solid white">
 										<AccordionItem>
 											<AccordionButton>
-												<AccordionIcon mr={5} bg="cyan"/>
+												<AccordionIcon mr={5} bg="cyan" />
 												<Box flex="1" textAlign="left" fontSize="sm">Doc:&nbsp;<b>{item.desc}</b></Box>
 											</AccordionButton>
 											<AccordionPanel>
-												<Text fontSize="sm">{`${item.instruction}`}</Text>
+												<Text fontSize="sm">{item["instruction"]}</Text>
 											</AccordionPanel>
 										</AccordionItem>
 									</Accordion>
