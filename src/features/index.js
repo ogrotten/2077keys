@@ -1,7 +1,6 @@
-import "./action.js"
-const features = [
-	require("./action.js"),
-	require("./walk.js"),
-]
+	const features = [
+		require("./action.js"),
+		require("./walk.js"),
+	]
 
-export default features
+	export default features

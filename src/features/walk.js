@@ -1,22 +1,25 @@
 export const feature = {
-	name: "Walk Toggle",
+	checkbox: "Walk Toggle",
 	desc: "Key to toggle walking speed.",
 	instruction: `
 This will add a key to your config.
 When pressed and held, will make the character move forward at a slow speed.
 
 Release the key to stop moving. 
-	`
-	,
+	`,
 	xml: {
 		seek: [`< mapping name = "LeftY_Axis" type = "Axis" >`],
 		action: "add tag end",
 		actionString: `<button id="IK_Alt" val="0.4" overridableUI="forward"/>`
 	},
-	json: {
-		seek: [],
-		replace: [],
+	parameter: {
+		first: "Insert",
+		last: "to Walk."
 	},
+	// json: {
+	// 	seek: [],
+	// 	replace: [],
+	// },
 	perform() {
 		return;
 	},
