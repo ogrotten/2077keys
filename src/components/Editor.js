@@ -9,6 +9,7 @@ import React from 'react'
 // import db from "../data/db"
 
 import {
+	Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
 	Box,
 	Container,
 	Checkbox, CheckboxGroup,
@@ -20,7 +21,8 @@ import {
 	Text,
 	Wrap, WrapItem,
 
-	useDisclosure
+	useDisclosure,
+	extendTheme
 } from "@chakra-ui/react"
 
 import { UpDownIcon } from '@chakra-ui/icons'
@@ -36,7 +38,6 @@ const Editor = () => {
 				<Tr>
 					<Th w={100}>Key Option</Th>
 					<Th >Parameters</Th>
-					<Th w={50} textAlign="center">View<br />Docs</Th>
 				</Tr>
 			</Thead>
 
@@ -44,22 +45,29 @@ const Editor = () => {
 				{features.default.map((feature, i) => {
 					const item = feature.feature
 					return (
-					<Tr key={item.checkbox}>
-						<Td><Checkbox>{item.checkbox}</Checkbox></Td>
-						<Td>
-							<VStack>
-								<InputGroup>
-									<InputLeftAddon children={item.parameter.before} />
-									<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
-									<InputRightAddon children={item.parameter.after} />
-								</InputGroup>
-								<Container>
-									<Text>{item.desc}</Text>
-								</Container>
-							</VStack>
-						</Td>
-						<Td textAlign="center"><UpDownIcon /></Td>
-					</Tr>
+						<Tr key={item.checkbox}>
+							<Td><Checkbox>{item.checkbox}</Checkbox></Td>
+							<Td pb={0} mb={0}>
+								<VStack>
+									<InputGroup>
+										<InputLeftAddon children={item.parameter.before} />
+										<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
+										<InputRightAddon children={item.parameter.after} />
+									</InputGroup>
+									<Accordion allowToggle w="100%" borderBottom="0px solid white">
+										<AccordionItem>
+											<AccordionButton>
+												<AccordionIcon mr={5} bg="cyan"/>
+												<Box flex="1" textAlign="left" fontSize="sm">Doc:&nbsp;<b>{item.desc}</b></Box>
+											</AccordionButton>
+											<AccordionPanel>
+												<Text fontSize="sm">{`${item.instruction}`}</Text>
+											</AccordionPanel>
+										</AccordionItem>
+									</Accordion>
+								</VStack>
+							</Td>
+						</Tr>
 					)
 				})}
 			</Tbody>
