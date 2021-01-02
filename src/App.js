@@ -27,7 +27,7 @@ function App() {
 	}, [isJSON, isXML])
 
 	return (
-		<Container maxW="xl">
+		<Container maxW="900px">
 			<VStack
 				divider={<StackDivider borderColor="gray.200" />}
 				spacing={4}
@@ -43,7 +43,7 @@ function App() {
 								: <Tab isDisabled color="silver"><LockIcon color="red.500" />&nbsp;Editor</Tab>
 						}
 						<Tab><QuestionIcon color="blue.400" />&nbsp;Help</Tab>
-						{/* <Tab><EditIcon />&nbsp;Editor</Tab> */}
+						<Tab><EditIcon />&nbsp;Editor</Tab>
 					</TabList>
 					<TabPanels>
 						<TabPanel>
@@ -55,9 +55,9 @@ function App() {
 						<TabPanel>
 							<p>Helping Text</p>
 						</TabPanel>
-						{/* <TabPanel>
+						<TabPanel>
 							<Editor />
-						</TabPanel> */}
+						</TabPanel>
 					</TabPanels>
 				</Tabs>
 			</VStack>

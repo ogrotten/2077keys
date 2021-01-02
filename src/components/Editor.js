@@ -9,43 +9,54 @@ import React from 'react'
 // import db from "../data/db"
 
 import {
-	// Box,
-	// Container,
-	Checkbox,
-	// CheckboxGroup,
-	// Divider,
-	// HStack,
+	Box,
+	Container,
+	Checkbox, CheckboxGroup,
+	Divider,
+	HStack, VStack,
 	Input, InputGroup, InputLeftAddon, InputRightAddon,
-	Table, Thead, Tbody, Tr, Th, Td, 
-	// Tag,
-	// Text,
-	// Wrap, WrapItem
+	Table, Thead, Tbody, Tr, Th, Td, TableCaption,
+	Tag,
+	Text,
+	Wrap, WrapItem,
+
+	useDisclosure
 } from "@chakra-ui/react"
 
+import { UpDownIcon } from '@chakra-ui/icons'
+
+const features = require("../features")
+
 const Editor = () => {
+	console.log(`conlog: `, features)
 	return (
-		<Table variant="simple">
+		<Table variant="simple" w="100%">
 			{/* <TableCaption placement="top">Imperial to metric conversion factors</TableCaption> */}
 			<Thead color="grey.300">
 				<Tr>
 					<Th>Key Option</Th>
 					<Th>Parameters</Th>
+					<Th textAlign="center">View<br />Docs</Th>
 				</Tr>
 			</Thead>
 			<Tbody size="sm">
 				<Tr>
+					<Td><Checkbox>Action</Checkbox></Td>
 					<Td>
-						<Checkbox>Action</Checkbox>
+						<VStack>
+							<InputGroup>
+								<InputLeftAddon children="Use" />
+								<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
+								<InputRightAddon children="as the action key." />
+							</InputGroup>
+							<Container>
+								<Text>Docs here</Text>
+							</Container>
+						</VStack>
 					</Td>
-					<Td>
-						<InputGroup>
-							<InputLeftAddon children="Use" />
-							<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
-							<InputRightAddon children="as the action key." />
-						</InputGroup>
-					</Td>
+					<Td textAlign="center"><UpDownIcon /></Td>
 				</Tr>
-				<Tr>
+				{/* <Tr>
 					<Td><Checkbox>Dodge</Checkbox></Td>
 					<Td>
 						<InputGroup>
@@ -54,6 +65,7 @@ const Editor = () => {
 							<InputRightAddon children="to dodge instead of dbl-tap." />
 						</InputGroup>
 					</Td>
+					<Td textAlign="center"><UpDownIcon /></Td>
 				</Tr>
 				<Tr>
 					<Td><Checkbox>Walk</Checkbox></Td>
@@ -64,7 +76,8 @@ const Editor = () => {
 							<InputRightAddon children="to walk." />
 						</InputGroup>
 					</Td>
-				</Tr>
+					<Td textAlign="center"><UpDownIcon /></Td>
+				</Tr>*/}
 			</Tbody>
 		</Table>)
 }
