@@ -28,56 +28,40 @@ import { UpDownIcon } from '@chakra-ui/icons'
 const features = require("../features")
 
 const Editor = () => {
-	console.log(`conlog: `, features)
+
 	return (
 		<Table variant="simple" w="100%">
 			{/* <TableCaption placement="top">Imperial to metric conversion factors</TableCaption> */}
 			<Thead color="grey.300">
 				<Tr>
-					<Th>Key Option</Th>
-					<Th>Parameters</Th>
-					<Th textAlign="center">View<br />Docs</Th>
+					<Th w={100}>Key Option</Th>
+					<Th >Parameters</Th>
+					<Th w={50} textAlign="center">View<br />Docs</Th>
 				</Tr>
 			</Thead>
+
 			<Tbody size="sm">
-				<Tr>
-					<Td><Checkbox>Action</Checkbox></Td>
-					<Td>
-						<VStack>
-							<InputGroup>
-								<InputLeftAddon children="Use" />
-								<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
-								<InputRightAddon children="as the action key." />
-							</InputGroup>
-							<Container>
-								<Text>Docs here</Text>
-							</Container>
-						</VStack>
-					</Td>
-					<Td textAlign="center"><UpDownIcon /></Td>
-				</Tr>
-				{/* <Tr>
-					<Td><Checkbox>Dodge</Checkbox></Td>
-					<Td>
-						<InputGroup>
-							<InputLeftAddon children="Use" />
-							<Input size="xl" style={{ textAlign: "center" }} placeholder="m" w="6ch" />
-							<InputRightAddon children="to dodge instead of dbl-tap." />
-						</InputGroup>
-					</Td>
-					<Td textAlign="center"><UpDownIcon /></Td>
-				</Tr>
-				<Tr>
-					<Td><Checkbox>Walk</Checkbox></Td>
-					<Td>
-						<InputGroup>
-							<InputLeftAddon children="Use" />
-							<Input size="xl" style={{ textAlign: "center" }} placeholder="m" w="6ch" />
-							<InputRightAddon children="to walk." />
-						</InputGroup>
-					</Td>
-					<Td textAlign="center"><UpDownIcon /></Td>
-				</Tr>*/}
+				{features.default.map((feature, i) => {
+					const item = feature.feature
+					return (
+					<Tr key={item.checkbox}>
+						<Td><Checkbox>{item.checkbox}</Checkbox></Td>
+						<Td>
+							<VStack>
+								<InputGroup>
+									<InputLeftAddon children={item.parameter.before} />
+									<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
+									<InputRightAddon children={item.parameter.after} />
+								</InputGroup>
+								<Container>
+									<Text>{item.desc}</Text>
+								</Container>
+							</VStack>
+						</Td>
+						<Td textAlign="center"><UpDownIcon /></Td>
+					</Tr>
+					)
+				})}
 			</Tbody>
 		</Table>)
 }
