@@ -36,18 +36,21 @@ const Editor = () => {
 		return arr.fill(true, 0)
 	})
 
-	const toggleRow = i => {
+	const toggleRow = position => {
 		setIsDisabled(() => {
-			const disArr = isDisabled.map((item, j) => {
-				if (j === i) {
-					return !item
+			const disArr = isDisabled.map((currently, index) => {
+				console.log(`conlog: `, `currently ${currently},`, `position ${position},`, `index ${index},`)
+				if (index === position) {
+					console.log(`conlog: set currently (${currently}) to ${!currently}`,)
+					return !currently
 					// if (item=true) {
 					// 	return false
 					// } else {
 					// 	return true
 					// }
 				} else {
-					return item
+					console.log(`conlog: leave currently (${currently}) unchanged at ${currently}`,)
+					return currently
 				}
 			})
 			// console.log(`conlog: `, disArr)
@@ -68,11 +71,11 @@ const Editor = () => {
 			<Tbody size="sm">
 				{features.default.map((feature, i) => {
 					const item = feature.feature
-					console.log(`conlog: ${i}`, isDisabled[i])
+					// console.log(`conlog: ${i}`, isDisabled[i])
 					return (
 						<Tr key={item.checkbox}>
 							<Td><Checkbox
-								onClick={() => {
+								onChange={() => {
 									toggleRow(i)
 								}}
 							>{item.checkbox}</Checkbox></Td>
