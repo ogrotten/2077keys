@@ -12,13 +12,14 @@ import {
 	Container,
 	Divider,
 	HStack,
+	Spinner,
 	Tag,
 	Text,
 	Wrap, WrapItem
 } from "@chakra-ui/react"
 
 const Chooser = () => {
-	const [allconfigs, setAllconfigs] = useState([])
+	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
 	const [areBoth, setAreBoth] = useState(false)
 
 	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
@@ -58,7 +59,7 @@ const Chooser = () => {
 	const getall = async () => {
 		let ret = await db.readAll();
 		ret.sort((x, y) => (x.date < y.date ? 1 : -1));
-		setAllconfigs([...ret])
+		setAllconfigs({ loaded: true, configs: [...ret] })
 	};
 
 	const doReset = () => {
@@ -68,9 +69,6 @@ const Chooser = () => {
 	}
 
 	//  #region useEffects 
-	useEffect(() => {
-		getall()
-	}, [])
 
 	useEffect(() => {
 		// console.log(`conlog: `, JSONfile)
@@ -79,6 +77,11 @@ const Chooser = () => {
 	useEffect(() => {
 		// console.log(XMLfile)
 	}, [XMLfile])
+
+	useEffect(() => {
+		// console.log(XMLfile)
+		console.log(`conlog: `, allconfigs.loaded)
+	}, [allconfigs])
 
 	useEffect(() => {
 		setAreBoth(isJSON && isXML)
@@ -105,12 +108,24 @@ const Chooser = () => {
 				<Divider mt={2} mb={2} />
 				<Button size="sm" onClick={doReset}>Reset</Button>
 			</Box>
-			{allconfigs.map((x) => {
-				return (
-					<Card key={x.id} props={x} />
-				)
-				// return x.id
-			})}
+			{ allconfigs.loaded		// check if allconfigs.loaded === true
+				? allconfigs.configs.length > 0		// if allconfigs.loaded is true, check if allconfigs.configs has any entries
+					? allconfigs.configs.map((x) => {		// if allconfigs.configs has entries
+						return (
+							<Card key={x.id} props={x} />
+						)
+						// return x.id
+					})
+					: <Text size="lg" color="silver" m={4}>No stored configs</Text>		// if allconfigs.configs has zero entries
+				: <Spinner		// if allconfigs.loaded === true
+					m={4}
+					thickness="4px"
+					speed="0.65s"
+					emptyColor="gray.200"
+					color="blue.500"
+					size="xl"
+				/>
+			}
 		</Container>
 	)
 }
