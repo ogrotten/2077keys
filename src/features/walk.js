@@ -13,8 +13,8 @@ Release the key to stop moving.
 		actionString: `<button id="IK_Alt" val="0.4" overridableUI="forward"/>`
 	},
 	parameter: {
-		first: "Insert",
-		last: "to Walk."
+		before: "Insert",
+		after: "key to Walk."
 	},
 	// json: {
 	// 	seek: [],
