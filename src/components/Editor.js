@@ -23,10 +23,10 @@ import {
 
 import { UpDownIcon } from '@chakra-ui/icons'
 
-import "../features"
+const j = require("../features")
 
 const Editor = () => {
-	console.log(`conlog: `, features)
+	console.log(`conlog: `, j)
 	return (
 		<Table variant="simple" w="100%">
 			{/* <TableCaption placement="top">Imperial to metric conversion factors</TableCaption> */}
@@ -76,7 +76,7 @@ const Editor = () => {
 					</Td>
 					<Td textAlign="center"><UpDownIcon /></Td>
 				</Tr>*/}
-			</Tbody> 
+			</Tbody>
 		</Table>)
 }
 
