@@ -45,7 +45,7 @@ function App() {
 								: <Tab isDisabled color="silver"><LockIcon color="red.500" />&nbsp;Editor</Tab>
 						}
 						<Tab><QuestionIcon color="blue.400" />&nbsp;Help</Tab>
-						<Tab><EditIcon />&nbsp;Editor</Tab>
+						{/* <Tab><EditIcon />&nbsp;Editor</Tab> */}
 					</TabList>
 					<TabPanels>
 						<TabPanel>
@@ -57,9 +57,9 @@ function App() {
 						<TabPanel>
 							<p>Helping Text</p>
 						</TabPanel>
-						<TabPanel>
+						{/* <TabPanel>
 							<Editor />
-						</TabPanel>
+						</TabPanel> */}
 					</TabPanels>
 				</Tabs>
 			</VStack>
