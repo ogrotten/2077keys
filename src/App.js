@@ -29,7 +29,7 @@ function App() {
 	}, [isJSON, isXML])
 
 	return (
-		<Container maxW="xl">
+		<Container maxW="900px">
 			<VStack
 				divider={<StackDivider borderColor="gray.200" />}
 				spacing={4}

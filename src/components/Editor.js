@@ -11,38 +11,47 @@ import {
 	Container,
 	Checkbox, CheckboxGroup,
 	Divider,
-	HStack,
+	HStack, VStack,
 	Input, InputGroup, InputLeftAddon, InputRightAddon,
 	Table, Thead, Tbody, Tr, Th, Td, TableCaption,
 	Tag,
 	Text,
-	Wrap, WrapItem
+	Wrap, WrapItem,
+
+	useDisclosure
 } from "@chakra-ui/react"
+
+import { UpDownIcon } from '@chakra-ui/icons'
 
 const Editor = () => {
 	return (
-		<Table variant="simple">
+		<Table variant="simple" w="100%">
 			{/* <TableCaption placement="top">Imperial to metric conversion factors</TableCaption> */}
 			<Thead color="grey.300">
 				<Tr>
 					<Th>Key Option</Th>
 					<Th>Parameters</Th>
+					<Th textAlign="center">View<br />Docs</Th>
 				</Tr>
 			</Thead>
 			<Tbody size="sm">
 				<Tr>
+					<Td><Checkbox>Action</Checkbox></Td>
 					<Td>
-						<Checkbox>Action</Checkbox>
+						<VStack>
+							<InputGroup>
+								<InputLeftAddon children="Use" />
+								<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
+								<InputRightAddon children="as the action key." />
+							</InputGroup>
+							<Container>
+								<Text>Docs here</Text>
+							</Container>
+						</VStack>
 					</Td>
-					<Td>
-						<InputGroup>
-							<InputLeftAddon children="Use" />
-							<Input size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch" />
-							<InputRightAddon children="as the action key." />
-						</InputGroup>
-					</Td>
+					<Td textAlign="center"><UpDownIcon /></Td>
 				</Tr>
-				<Tr>
+				{/* <Tr>
 					<Td><Checkbox>Dodge</Checkbox></Td>
 					<Td>
 						<InputGroup>
@@ -51,6 +60,7 @@ const Editor = () => {
 							<InputRightAddon children="to dodge instead of dbl-tap." />
 						</InputGroup>
 					</Td>
+					<Td textAlign="center"><UpDownIcon /></Td>
 				</Tr>
 				<Tr>
 					<Td><Checkbox>Walk</Checkbox></Td>
@@ -61,8 +71,9 @@ const Editor = () => {
 							<InputRightAddon children="to walk." />
 						</InputGroup>
 					</Td>
-				</Tr>
-			</Tbody>
+					<Td textAlign="center"><UpDownIcon /></Td>
+				</Tr>*/}
+			</Tbody> 
 		</Table>)
 }
 
