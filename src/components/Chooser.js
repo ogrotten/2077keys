@@ -100,13 +100,14 @@ const Chooser = () => {
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-				<Text><b>Upload New:</b></Text>
 				<Button size="sm" p={0}>
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
+				<Text>Will upload config files.</Text>
 				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
 				<Divider mt={2} mb={2} />
 				<Button size="sm" onClick={doReset}>Reset</Button>
+				<Text>Unload any current configs.</Text>
 			</Box>
 			{ allconfigs.loaded		// check if allconfigs.loaded === true
 				? allconfigs.configs.length > 0		// if allconfigs.loaded is true, check if allconfigs.configs has any entries
