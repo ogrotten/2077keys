@@ -7,9 +7,7 @@ import Show from "./components/Show"
 import Editor from "./components/Editor"
 
 import {
-	Box,
 	Container,
-	Divider,
 	StackDivider,
 	Tabs, TabList, TabPanels, Tab,
 	TabPanel,
