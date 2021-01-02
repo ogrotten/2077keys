@@ -4,6 +4,7 @@ import { chkJSON, chkXML } from "./recoil/selectors";
 
 import Chooser from "./components/Chooser"
 import Show from "./components/Show"
+import Editor from "./components/Editor"
 
 import {
 	Box,
@@ -50,7 +51,7 @@ function App() {
 							<Chooser />
 						</TabPanel>
 						<TabPanel>
-							<p>Editor</p>
+							<Editor />
 						</TabPanel>
 						<TabPanel>
 							<p>Helping Text</p>

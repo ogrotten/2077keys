@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from "recoil"
-import { jsonobj, xmlobj } from "../recoil/atoms"
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
+import { jsonobj, xmlobj, options } from "../recoil/atoms"
 import { chkJSON, chkXML } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
@@ -8,6 +8,7 @@ import db from "../data/db"
 
 import {
 	Box,
+	Button,
 	Container,
 	Divider,
 	HStack,
@@ -25,6 +26,10 @@ const Chooser = () => {
 
 	const isJSON = useRecoilValue(chkJSON)
 	const isXML = useRecoilValue(chkXML)
+
+	const resetJSON = useResetRecoilState(jsonobj);
+	const resetXML = useResetRecoilState(xmlobj);
+	const resetOptions = useResetRecoilState(options);
 
 
 	const { uploader, reset } = useUploader({
@@ -56,6 +61,13 @@ const Chooser = () => {
 		setAllconfigs([...ret])
 	};
 
+	const doReset = () => {
+		resetJSON()
+		resetXML()
+		resetOptions()
+	}
+
+	//  #region useEffects 
 	useEffect(() => {
 		getall()
 	}, [])
@@ -78,13 +90,20 @@ const Chooser = () => {
 			json: JSONfile,
 			xml: XMLfile
 		})
+		getall()
 	}, [areBoth])
+	// #endregion 
 
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
 				<Text><b>Upload New:</b></Text>
-				<input {...uploader} id="input" />
+				<Button size="sm" p={0}>
+					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
+				</Button>
+				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
+				<Divider mt={2} mb={2} />
+				<Button size="sm" onClick={doReset}>Reset</Button>
 			</Box>
 			{allconfigs.map((x) => {
 				return (
