@@ -21,7 +21,7 @@ db.read = (data) => {
 
 db.readAll = (data) => {
 	const x = db.config.where("id").above(0).toArray()
-	console.log(`conlog: `, x.length)
+	// console.log(`conlog: `, x.length)
 	return x
 }
 

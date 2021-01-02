@@ -15,7 +15,6 @@ import {
 	Spinner,
 	Tag,
 	Text,
-	Wrap, WrapItem
 } from "@chakra-ui/react"
 
 const Chooser = () => {
@@ -33,7 +32,7 @@ const Chooser = () => {
 	const resetOptions = useResetRecoilState(options);
 
 
-	const { uploader, reset } = useUploader({
+	const { uploader } = useUploader({
 		onSelectFile: incoming => {
 			// console.log(`Chooser.js 20: `,incoming[0]);
 			const fileReader = new FileReader();
@@ -80,7 +79,7 @@ const Chooser = () => {
 
 	useEffect(() => {
 		// console.log(XMLfile)
-		console.log(`conlog: `, allconfigs.loaded)
+		// console.log(`conlog: `, allconfigs.loaded)
 	}, [allconfigs])
 
 	useEffect(() => {
@@ -94,6 +93,7 @@ const Chooser = () => {
 			xml: XMLfile
 		})
 		getall()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [areBoth])
 	// #endregion 
 
@@ -136,13 +136,13 @@ const Card = (props) => {
 
 	useEffect(() => {
 		const dt = new Date(data.date)
-		const ops =
 			setData({
 				...data,
 				carddate: dt.toDateString(),
 				// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
 				cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
 			})
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	return (
