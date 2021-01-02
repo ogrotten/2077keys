@@ -29,7 +29,7 @@ Post #41
 
 1. Go into the game and unbind/ rebind the key you want to use for your walk toggle if its bind to something else, like Alt for example.
 
-2. Then go into Cyberpunk 2077\r6\config and edit InputUserMappings.xml file.
+2. Then go into Cyberpunk 2077\\r6\\config and edit InputUserMappings.xml file.
 
 3. Find the section < mapping name = "LeftY_Axis" type = "Axis" > at the top and add this at the bottom
 	< button id = "IK_Alt" val = "0.4" overridableUI = "forward" /> or the value can be whatever you want.It's the speed of your character 1.0 = full. It should look something like this:

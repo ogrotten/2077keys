@@ -1,6 +1,6 @@
-// import React from 'react'
+import React, { useState } from 'react'
 
-import React, { useState, useEffect } from 'react'
+// import React, { useState, useEffect } from 'react'
 // import { useRecoilState, useRecoilValue } from "recoil"
 // import { jsonobj, xmlobj } from "../recoil/atoms"
 // import { chkJSON, chkXML } from "../recoil/selectors";
@@ -11,21 +11,14 @@ import React, { useState, useEffect } from 'react'
 import {
 	Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon,
 	Box,
-	Container,
-	Checkbox, CheckboxGroup,
-	Divider,
-	HStack, VStack,
+	// Container,
+	Checkbox, 
+	VStack,
 	Input, InputGroup, InputLeftAddon, InputRightAddon,
-	Table, Thead, Tbody, Tr, Th, Td, TableCaption,
-	Tag,
+	Table, Thead, Tbody, Tr, Th, Td,
 	Text,
-	Wrap, WrapItem,
-
-	useDisclosure,
-	extendTheme
 } from "@chakra-ui/react"
 
-import { UpDownIcon } from '@chakra-ui/icons'
 
 const features = require("../features")
 
