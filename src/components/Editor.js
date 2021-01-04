@@ -56,7 +56,7 @@ const Editor = () => {
 			{/* <TableCaption placement="top">Imperial to metric conversion factors</TableCaption> */}
 			<Thead color="grey.300">
 				<Tr>
-					<Th w={100}>Key Option</Th>
+					<Th w={200}>Key Option</Th>
 					<Th >Parameters</Th>
 				</Tr>
 			</Thead>
