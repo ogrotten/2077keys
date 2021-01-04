@@ -6,11 +6,14 @@ db.version(1).stores({
 });
 
 db.read = (data) => {
+	conlog(`>>> DB Read: data ${data}`)
 	return db.config.get(data)
 		.then((x) => {
 			if (x) {
 				conlog(`>>> DB Read: id ${x.id}`)
 				return x
+			} else {
+				conlog(`>>> DB Read: No data?`)
 			}
 			return 0
 		})

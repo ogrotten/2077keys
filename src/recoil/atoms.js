@@ -14,3 +14,8 @@ export const options = atom({
 	key: "options",
 	default: [],
 });
+
+export const fromDB = atom({
+	key: "fromDB",
+	default: false,
+});

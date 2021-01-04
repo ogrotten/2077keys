@@ -11,6 +11,7 @@ import {
 	Button,
 	Container,
 	Divider,
+	Flex, Spacer,
 	HStack,
 	Spinner,
 	Tag,
@@ -23,6 +24,8 @@ const Chooser = () => {
 
 	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
 	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
+	// const [options, setOptions] = useRecoilState(xmlobj)
+	const [fromDB, setFromDB] = useRecoilState(xmlobj)
 
 	const isJSON = useRecoilValue(chkJSON)
 	const isXML = useRecoilValue(chkXML)
@@ -88,10 +91,12 @@ const Chooser = () => {
 
 	useEffect(() => {
 		// areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
-		db.insert({
-			json: JSONfile,
-			xml: XMLfile
-		})
+		if (!fromDB) {
+			db.insert({
+				json: JSONfile,
+				xml: XMLfile
+			})
+		}
 		getall()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [areBoth])
@@ -100,11 +105,11 @@ const Chooser = () => {
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-				<Button size="sm" p={0}>
+				<Button size="sm" p={0} colorScheme="blue">
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
-				<Text>Will upload config files.</Text>
 				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
+				<Text>Will upload config files.</Text>
 				<Divider mt={2} mb={2} />
 				<Button size="sm" onClick={doReset}>Reset</Button>
 				<Text>Unload current configs.</Text>
@@ -134,25 +139,44 @@ const Chooser = () => {
 const Card = (props) => {
 	const [data, setData] = useState(props.props)
 
+	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
+	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
+	const [options, setOptions] = useRecoilState(xmlobj)
+	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+
+	const doLoad = async (e) => {
+		e.preventDefault()
+		let ret = await db.read(data.id);
+		console.log(`conlog: `, ret)
+		setFromDB(true)
+		setOptions(ret.options)
+		setXMLfile(ret.xml)
+		setJSONfile(ret.json)
+	}
+
 	useEffect(() => {
 		const dt = new Date(data.date)
-			setData({
-				...data,
-				carddate: dt.toDateString(),
-				// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
-				cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
-			})
-			// eslint-disable-next-line react-hooks/exhaustive-deps
+		setData({
+			...data,
+			carddate: dt.toDateString(),
+			// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
+			cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
+		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	return (
 		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-			<HStack spacing={4}>
+			<HStack spacing={2}>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">option</Tag>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">array</Tag>
 			</HStack>
 			<Divider mt={2} mb={2} />
-			<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
+			<Flex>
+				<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
+				<Spacer />
+				<Button size="xs" colorScheme="blue" onClick={doLoad}>Load...</Button>
+			</Flex>
 		</Box>
 	)
 }
