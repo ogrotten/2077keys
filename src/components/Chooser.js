@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
-import { jsonobj, xmlobj, options } from "../recoil/atoms"
-import { chkJSON, chkXML } from "../recoil/selectors";
+import { config } from "../recoil/atoms"
+import { getJSON, getXML, exists } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
@@ -22,20 +22,10 @@ import { ViewIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
-	const [areBoth, setAreBoth] = useState(false)
 
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	// const [options, setOptions] = useRecoilState(xmlobj)
-	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+	const [config, setConfig] = useRecoilState(config)
 
-	const isJSON = useRecoilValue(chkJSON)
-	const isXML = useRecoilValue(chkXML)
-
-	const resetJSON = useResetRecoilState(jsonobj);
-	const resetXML = useResetRecoilState(xmlobj);
-	const resetOptions = useResetRecoilState(options);
-
+	const resetConfig = useResetRecoilState(config);
 
 	const { uploader } = useUploader({
 		onSelectFile: incoming => {
@@ -44,10 +34,12 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
+				if (current.includes('"version": 65')) {
+					setConfig({...config, json: JSON.parse(current)})
+				}
 				if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
-						setXMLfile(current)
+						setConfig({ ...config, xml: setXMLfile(current) })
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -67,42 +59,16 @@ const Chooser = () => {
 	};
 
 	const doReset = () => {
-		resetJSON()
-		resetXML()
-		resetOptions()
+		resetConfig()
 	}
 
-	//  #region useEffects 
-
 	useEffect(() => {
-		// console.log(`conlog: `, JSONfile)
-	}, [JSONfile])
-
-	useEffect(() => {
-		// console.log(XMLfile)
-	}, [XMLfile])
-
-	useEffect(() => {
-		// console.log(XMLfile)
-		// console.log(`conlog: `, allconfigs.loaded)
-	}, [allconfigs])
-
-	useEffect(() => {
-		setAreBoth(isJSON && isXML)
-	}, [isJSON, isXML])
-
-	useEffect(() => {
-		// areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
-		if (!fromDB) {
-			db.insert({
-				json: JSONfile,
-				xml: XMLfile
-			})
+		if (exists.JSON && exists.XML) {
+			db.insert(config)
 		}
 		getall()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [areBoth])
-	// #endregion 
+	}, [exists])
 
 	return (
 		<Container>
