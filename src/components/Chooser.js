@@ -18,6 +18,8 @@ import {
 	Text,
 } from "@chakra-ui/react"
 
+import { ViewIcon } from '@chakra-ui/icons'
+
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
 	const [areBoth, setAreBoth] = useState(false)
@@ -175,7 +177,7 @@ const Card = (props) => {
 			<Flex>
 				<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
 				<Spacer />
-				<Button size="xs" colorScheme="blue" onClick={doLoad}>Load...</Button>
+				<Button size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>
 		</Box>
 	)
