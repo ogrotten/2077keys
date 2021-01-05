@@ -23,10 +23,11 @@ const Editor = () => {
 				{features.default.map((feature, i) => {
 					const item = feature.feature
 					// console.log(`conlog: ${i}`, isDisabled[i])
-					return <EditorItem item={item} index={i} key={item.checkbox}/>
+					return <EditorItem item={item} index={i} key={item.checkbox} />
 				})}
 			</Tbody>
-		</Table>)
+		</Table>
+	)
 }
 
 export default Editor

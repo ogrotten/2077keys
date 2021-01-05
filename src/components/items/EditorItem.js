@@ -21,12 +21,17 @@ const features = require("../../features")
 
 const EditorItem = (props) => {
 	const {item, index} = props
-	const [newKey, setNewKey] = useState("")
+	const [theKey, setTheKey] = useState("")
 	const [isDisabled, setIsDisabled] = useState(() => {
 		const arr = []
 		arr.length = features.default.length
 		return arr.fill(true, 0)
 	})
+
+	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
+	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
+	// const [options, setOptions] = useRecoilState(xmlobj)
+	const [fromDB, setFromDB] = useRecoilState(xmlobj)
 
 	const toggleRow = position => {
 		setIsDisabled(() => {
@@ -46,8 +51,19 @@ const EditorItem = (props) => {
 
 	const doKey = (e) => {
 		e.preventDefault()
-		setNewKey(e.target.value)
+		setTheKey(e.target.value)
 	}
+	useEffect(() => {
+		let newXML
+		if (isDisabled[index]) {
+			// if unchecked
+			newXML = item.perform(XMLfile, theKey)	//true
+		} else {
+			// checked
+			newXML = item.revert(XMLfile, theKey)	//false 
+		}
+		setXMLfile(newXML)
+	}, [theKey])
 
 	return (
 		<Tr key={item.checkbox}>
@@ -60,7 +76,7 @@ const EditorItem = (props) => {
 				<VStack>
 					<InputGroup>
 						<InputLeftAddon children={item.parameter.before} />
-						<Input onChange={doKey} value={[index, newKey]}
+						<Input onChange={doKey}
 							isDisabled={isDisabled[index]} size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch"
 						/>
 						<InputRightAddon children={item.parameter.after} />
