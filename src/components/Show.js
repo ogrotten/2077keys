@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from "recoil"
-import { chkJSON, chkXML } from "../recoil/selectors";
+import { exists } from "../recoil/selectors";
 
 import {
 	Alert, AlertIcon, AlertTitle, AlertDescription,

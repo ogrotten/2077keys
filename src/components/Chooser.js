@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
-import { config } from "../recoil/atoms"
-import { getJSON, getXML, exists } from "../recoil/selectors";
+import { configState } from "../recoil/atoms"
+import { getJSON, getXML, existState } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
@@ -23,7 +23,8 @@ import { ViewIcon } from '@chakra-ui/icons'
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
 
-	const [config, setConfig] = useRecoilState(config)
+	const [config, setConfig] = useRecoilState(configState)
+	const exists = useRecoilValue(existState)
 
 	const resetConfig = useResetRecoilState(config);
 
@@ -35,11 +36,11 @@ const Chooser = () => {
 			fileReader.onload = e => {
 				const current = e.target.result
 				if (current.includes('"version": 65')) {
-					setConfig({...config, json: JSON.parse(current)})
+					setConfig({ ...config, json: JSON.parse(current), status: "FILE"})
 				}
 				if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
-						setConfig({ ...config, xml: setXMLfile(current) })
+						setConfig({ ...config, xml: current, status: "FILE" })
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -84,9 +85,9 @@ const Chooser = () => {
 			</Box>
 			{ allconfigs.loaded		// check if allconfigs.loaded === true
 				? allconfigs.configs.length > 0		// if allconfigs.loaded is true, check if allconfigs.configs has any entries
-					? allconfigs.configs.map((x) => {		// if allconfigs.configs has entries
+					? allconfigs.configs.map((item) => {		// if allconfigs.configs has entries
 						return (
-							<Card key={x.id} props={x} />
+							<Card key={x.id} x={item} />
 						)
 						// return x.id
 					})
@@ -105,21 +106,20 @@ const Chooser = () => {
 }
 
 const Card = (props) => {
-	const [data, setData] = useState(props.props)
+	const [data, setData] = useState(props.item)
 
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	const [options, setOptions] = useRecoilState(xmlobj)
-	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+	const [config, setConfig] = useRecoilState(configState)
 
 	const doLoad = async (e) => {
 		e.preventDefault()
 		let ret = await db.read(data.id);
 		console.log(`conlog: `, ret)
-		setFromDB(true)
-		setOptions(ret.options)
-		setXMLfile(ret.xml)
-		setJSONfile(ret.json)
+		setConfig({
+			options: ret.options,
+			json: ret.json,
+			xml: ret.xml,
+			status: "DATABASE",
+		})
 	}
 
 	useEffect(() => {

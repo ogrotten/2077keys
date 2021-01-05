@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export const config = atom({
+export const configState = atom({
 	key: "config",
 	default: {
 		options: [],

@@ -15,7 +15,7 @@ export const getXML = selector({
 	},
 });
 
-export const exists = selector({
+export const existState = selector({
 	key: "exists",
 	get: ({ get }) => {
 		const exists = { json: false, xml: false, }
