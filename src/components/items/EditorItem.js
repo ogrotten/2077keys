@@ -13,13 +13,14 @@ import {
 	Checkbox,
 	VStack,
 	Input, InputGroup, InputLeftAddon, InputRightAddon,
-	Table, Thead, Tbody, Tr, Th, Td,
+	Tr, Td,
 	Text,
 } from "@chakra-ui/react"
 
 const features = require("../../features")
 
 const EditorItem = (props) => {
+	const {item, index} = props
 	const [newKey, setNewKey] = useState("")
 	const [isDisabled, setIsDisabled] = useState(() => {
 		const arr = []
@@ -49,41 +50,35 @@ const EditorItem = (props) => {
 	}
 
 	return (
-		features.default.map((feature, i) => {
-			const item = feature.feature
-			// console.log(`conlog: ${i}`, isDisabled[i])
-			return (
-				<Tr key={item.checkbox}>
-					<Td><Checkbox
-						onChange={() => {
-							toggleRow(i)
-						}}
-					>{item.checkbox}</Checkbox></Td>
-					<Td pb={0} mb={0}>
-						<VStack>
-							<InputGroup>
-								<InputLeftAddon children={item.parameter.before} />
-								<Input onChange={doKey} value={[i, newKey]}
-									isDisabled={isDisabled[i]} size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch"
-								/>
-								<InputRightAddon children={item.parameter.after} />
-							</InputGroup>
-							<Accordion allowToggle w="100%" borderBottom="0px solid white">
-								<AccordionItem>
-									<AccordionButton>
-										<AccordionIcon mr={5} bg="cyan" />
-										<Box flex="1" textAlign="left" fontSize="sm">Doc:&nbsp;<b>{item.desc}</b></Box>
-									</AccordionButton>
-									<AccordionPanel>
-										<Text fontSize="sm" style={{ whiteSpace: "pre-line" }}>{item["instruction"]}</Text>
-									</AccordionPanel>
-								</AccordionItem>
-							</Accordion>
-						</VStack>
-					</Td>
-				</Tr>
-			)
-		})
+		<Tr key={item.checkbox}>
+			<Td><Checkbox
+				onChange={() => {
+					toggleRow(index)
+				}}
+			>{item.checkbox}</Checkbox></Td>
+			<Td pb={0} mb={0}>
+				<VStack>
+					<InputGroup>
+						<InputLeftAddon children={item.parameter.before} />
+						<Input onChange={doKey} value={[index, newKey]}
+							isDisabled={isDisabled[index]} size="xl" style={{ textAlign: "center" }} placeholder="f" w="6ch"
+						/>
+						<InputRightAddon children={item.parameter.after} />
+					</InputGroup>
+					<Accordion allowToggle w="100%" borderBottom="0px solid white">
+						<AccordionItem>
+							<AccordionButton>
+								<AccordionIcon mr={5} bg="cyan" />
+								<Box flex="1" textAlign="left" fontSize="sm">Doc:&nbsp;<b>{item.desc}</b></Box>
+							</AccordionButton>
+							<AccordionPanel>
+								<Text fontSize="sm" style={{ whiteSpace: "pre-line" }}>{item["instruction"]}</Text>
+							</AccordionPanel>
+						</AccordionItem>
+					</Accordion>
+				</VStack>
+			</Td>
+		</Tr>
 	)
 }
 
