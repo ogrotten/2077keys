@@ -32,7 +32,7 @@ db.insert = async (data) => {
 	// is this necessary?
 	// const dataString = JSON.parse(JSON.stringify(data))
 	if ((data.xml !== "") && (data.json.data !== null)) {
-		if ("id" in data) delete data.id
+		// if ("id" in data) delete data.id
 		data.date = new Date()
 		return await db.config.add(data)
 			.then((x) => {
@@ -43,6 +43,7 @@ db.insert = async (data) => {
 				console.error(">>> DB Add error", err)
 			})
 	}
+	conlog(">>> DB check:", data)
 }
 
 db.delete = (id) => {
@@ -59,7 +60,7 @@ export default db;
 
 function conlog() {
 	// flag to toggle logging 
-	const show = false
+	const show = true
 
 	if (show) {
 		console.log("____DB____")

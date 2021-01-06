@@ -70,9 +70,9 @@ const Chooser = () => {
 	}
 
 	useEffect(() => {
-		if (exists.JSON && exists.XML && config.status==="FILE") {
+		// if (exists.JSON && exists.XML && config.status==="FILE") {
 			db.insert(config)
-		}
+		// }
 		getall()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [exists])
@@ -83,6 +83,9 @@ const Chooser = () => {
 				<Button size="sm" p={0} colorScheme="blue">
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
+				{
+				console.log(`conlog: `, config)
+				}
 				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
 				<Text>Will upload config files.</Text>
 				<Divider mt={2} mb={2} />
