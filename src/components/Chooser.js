@@ -36,14 +36,19 @@ const Chooser = () => {
 			fileReader.onload = e => {
 				const current = e.target.result
 				let status, date = new Date()
-				// if (config.status === "") {
-				// 	status = "ONE" 
-				// } else if (config.status === "ONE") {
-				// 	status = "FILE"
-				// }
+				if (config.status === "") {
+					status = "ONE" 
+				} else if (config.status === "ONE") {
+					status = "FILE"
+				}
+
+				// if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
+				// if (current.includes('xml version="1.0"')) {
+
+
 				if (current.includes('"version": 65')) {
-					setConfig({ ...config, json: JSON.parse(current)})
-					// setConfig({ ...config, json: JSON.parse(current), status, date })
+					// setConfig({ ...config, json: JSON.parse(current)})
+					setConfig({ ...config, json: JSON.parse(current), status, date })
 				} else if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
 						setConfig({ ...config, xml: current, status })
