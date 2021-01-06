@@ -18,12 +18,12 @@ export const getXML = selector({
 export const existState = selector({
 	key: "existState",
 	get: ({ get }) => {
-		const JSON = get(configState).json
-		const XML = get(configState).xml
-		const exists = { JSON: false, XML: false, }
-		exists.JSON = Object.keys(JSON).length === 0 ? false : true
-		exists.XML = XML.length === 0 ? false : true
-		return exists
+		// const JSON = get(configState).json
+		// const XML = get(configState).xml
+		return {
+			JSON: Object.keys(get(configState).json).length === 0 ? false : true,
+			XML: get(configState).xml.length === 0 ? false : true
+		}
 	}
 })
 
