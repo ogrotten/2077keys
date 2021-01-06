@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from "recoil"
-import { exists } from "../recoil/selectors";
+import { existState } from "../recoil/selectors";
 
 import {
 	Alert, AlertIcon, AlertTitle, AlertDescription,
@@ -11,20 +11,13 @@ import {
 } from "@chakra-ui/react"
 
 const Show = () => {
-	const [areBoth, setAreBoth] = useState(false)
-
-	const isJSON = useRecoilValue(chkJSON)
-	const isXML = useRecoilValue(chkXML)
-
-	useEffect(() => {
-		setAreBoth(isJSON && isXML)
-	}, [isJSON, isXML])
+	const exists = useRecoilValue(existState)
 
 	return (
 		<VStack>
 			<br />
 			{
-				areBoth
+				exists.JSON && exists.XML
 					? <Alert status="success" flexDirection="column" alignItems="left" rounded="md" border="1px" p="15px" borderColor="green.200">
 						<HStack><AlertIcon /><AlertTitle w="30%">Ready</AlertTitle></HStack>
 						<AlertDescription fontSize="sm">Editor Unlocked.</AlertDescription>
@@ -38,7 +31,7 @@ const Show = () => {
 				<HStack>
 					<Text>inputUserMappings.xml</Text>
 					{
-						isXML
+						exists.XML
 							? <Badge align="center" w="100px" colorScheme="green" variant="outline">Ready</Badge>
 							: <Badge align="center" w="100px" colorScheme="red" variant="solid">NOT Loaded</Badge>
 					}
@@ -46,7 +39,7 @@ const Show = () => {
 				<HStack>
 					<Text>UserSettings.json</Text>
 					{
-						isJSON
+						exists.JSON
 							? <Badge align="center" w="100px" colorScheme="green" variant="outline">Ready</Badge>
 							: <Badge align="center" w="100px" colorScheme="red" variant="solid">NOT Loaded</Badge>
 					}

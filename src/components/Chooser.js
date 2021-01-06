@@ -26,7 +26,7 @@ const Chooser = () => {
 	const [config, setConfig] = useRecoilState(configState)
 	const exists = useRecoilValue(existState)
 
-	const resetConfig = useResetRecoilState(config);
+	const resetConfig = useResetRecoilState(configState);
 
 	const { uploader } = useUploader({
 		onSelectFile: incoming => {
@@ -87,7 +87,7 @@ const Chooser = () => {
 				? allconfigs.configs.length > 0		// if allconfigs.loaded is true, check if allconfigs.configs has any entries
 					? allconfigs.configs.map((item) => {		// if allconfigs.configs has entries
 						return (
-							<Card key={x.id} x={item} />
+							<Card key={item.id} item={item} />
 						)
 						// return x.id
 					})
