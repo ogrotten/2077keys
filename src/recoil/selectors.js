@@ -18,9 +18,18 @@ export const getXML = selector({
 export const existState = selector({
 	key: "existState",
 	get: ({ get }) => {
-		const exists = { json: false, xml: false, }
-		exists.JSON = Object.keys(getJSON).length === 0 ? true : false
-		exists.XML = getXML.length === 0 ? true : false
+		const JSON = get(configState).json
+		const XML = get(configState).xml
+		const exists = { JSON: false, XML: false, }
+		exists.JSON = Object.keys(JSON).length === 0 ? false : true
+		exists.XML = XML.length === 0 ? false : true
 		return exists
 	}
 })
+
+// export const uploadState = selector({
+// 	key: "uploadState",
+// 	get: ({get}) =>{
+// 		return get(configState).status
+// 	}
+// })

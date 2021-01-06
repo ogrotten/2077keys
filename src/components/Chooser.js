@@ -35,12 +35,18 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
+				let status
+				if (config.status === "") {
+					status = "ONE" 
+				} else if (config.status === "ONE") {
+					status = "FILE"
+				}
 				if (current.includes('"version": 65')) {
-					setConfig({ ...config, json: JSON.parse(current), status: "FILE"})
+					setConfig({ ...config, json: JSON.parse(current), status })
 				}
 				if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
-						setConfig({ ...config, xml: current, status: "FILE" })
+						setConfig({ ...config, xml: current, status })
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -64,7 +70,7 @@ const Chooser = () => {
 	}
 
 	useEffect(() => {
-		if (exists.JSON && exists.XML) {
+		if (exists.JSON && exists.XML && config.status==="FILE") {
 			db.insert(config)
 		}
 		getall()
@@ -106,28 +112,27 @@ const Chooser = () => {
 }
 
 const Card = (props) => {
-	const [data, setData] = useState(props.item)
+	const [item, setItem] = useState(props.item)
 
 	const [config, setConfig] = useRecoilState(configState)
+	const exists = useRecoilValue(existState)
 
 	const doLoad = async (e) => {
 		e.preventDefault()
-		let ret = await db.read(data.id);
-		console.log(`conlog: `, ret)
+		let fromDB = await db.read(item.id);
+		console.log(`conlog: `, fromDB)
 		setConfig({
-			options: ret.options,
-			json: ret.json,
-			xml: ret.xml,
+			...fromDB,
 			status: "DATABASE",
 		})
 	}
 
 	useEffect(() => {
-		const dt = new Date(data.date)
-		setData({
-			...data,
+		console.log(`conlog: `, exists)
+		const dt = new Date(item.date)
+		setItem({
+			...item,
 			carddate: dt.toDateString(),
-			// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
 			cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
 		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +146,7 @@ const Card = (props) => {
 			</HStack>
 			<Divider mt={2} mb={2} />
 			<Flex>
-				<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
+				<Text>(id: {item.id}) {item.carddate} - {item.cardtime}</Text>
 				<Spacer />
 				<Button size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>
