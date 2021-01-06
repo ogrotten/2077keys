@@ -22,8 +22,11 @@ import { ViewIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
-
 	const [config, setConfig] = useRecoilState(configState)
+
+	const [fileJSON, setFileJSON] = useState({})
+	const [fileXML, setFileXML] = useState("")
+	
 	const exists = useRecoilValue(existState)
 
 	const resetConfig = useResetRecoilState(configState);
@@ -47,11 +50,12 @@ const Chooser = () => {
 
 
 				if (current.includes('"version": 65')) {
-					// setConfig({ ...config, json: JSON.parse(current)})
-					setConfig({ ...config, json: JSON.parse(current), status, date })
+					setFileJSON(current)
+					// setConfig({ ...config, json: JSON.parse(current), status, date })
 				} else if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
-						setConfig({ ...config, xml: current, status })
+						setFileXML(current)
+						// setConfig({ ...config, xml: current, status })
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -79,23 +83,28 @@ const Chooser = () => {
 			db.insert(config)
 		}
 		getall()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [exists])
+	
+	useEffect(() => {
+		setConfig({...config, json:fileJSON, xml: fileXML})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fileJSON, fileXML])
 
-	const checkdata = (e) => {
-		// e.preventDefault()
+	useEffect(() => {
 		console.log(`conlog: `, config)
-	}
+	}, [config])
+
+	// const checkdata = (e) => {
+	// 	// e.preventDefault()
+	// 	console.log(`conlog: `, config)
+	// }
 
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-				<Button size="sm" p={0} colorScheme="blue" onClick={checkdata}>
+				<Button size="sm" p={0} colorScheme="blue" /* onClick={checkdata} */>
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
-				{
-				console.log(`conlog: `, config)
-				}
 				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
 				<Text>Will upload config files.</Text>
 				<Divider mt={2} mb={2} />
@@ -141,7 +150,7 @@ const Card = (props) => {
 	}
 
 	useEffect(() => {
-		console.log(`conlog: `, exists)
+		// console.log(`conlog: `, exists)
 		const dt = new Date(item.date)
 		setItem({
 			...item,
