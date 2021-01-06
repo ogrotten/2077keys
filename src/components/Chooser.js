@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
-import { jsonobj, xmlobj, options } from "../recoil/atoms"
-import { chkJSON, chkXML } from "../recoil/selectors";
+import { configState } from "../recoil/atoms"
+import { getJSON, getXML, existState } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
@@ -22,32 +22,32 @@ import { ViewIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
-	const [areBoth, setAreBoth] = useState(false)
+	const [config, setConfig] = useRecoilState(configState)
 
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	// const [options, setOptions] = useRecoilState(xmlobj)
-	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+	const [fileJSON, setFileJSON] = useState({})
+	const [fileXML, setFileXML] = useState("")
+	
+	const exists = useRecoilValue(existState)
 
-	const isJSON = useRecoilValue(chkJSON)
-	const isXML = useRecoilValue(chkXML)
-
-	const resetJSON = useResetRecoilState(jsonobj);
-	const resetXML = useResetRecoilState(xmlobj);
-	const resetOptions = useResetRecoilState(options);
-
+	const resetConfig = useResetRecoilState(configState);
 
 	const { uploader } = useUploader({
 		onSelectFile: incoming => {
-			// console.log(`Chooser.js 20: `,incoming[0]);
 			const fileReader = new FileReader();
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				if (current.includes('xml version="1.0"')) {
+				let status, date = new Date()
+				if (config.status === "") {
+					status = "ONE" 
+				} else if (config.status === "ONE") {
+					status = "FILE"
+				}
+				if (current.includes('"version": 65')) {
+					setFileJSON(current)
+				} else if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
-						setXMLfile(current)
+						setFileXML(current)
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -67,47 +67,25 @@ const Chooser = () => {
 	};
 
 	const doReset = () => {
-		resetJSON()
-		resetXML()
-		resetOptions()
+		resetConfig()
 	}
 
-	//  #region useEffects 
-
 	useEffect(() => {
-		// console.log(`conlog: `, JSONfile)
-	}, [JSONfile])
-
-	useEffect(() => {
-		// console.log(XMLfile)
-	}, [XMLfile])
-
-	useEffect(() => {
-		// console.log(XMLfile)
-		// console.log(`conlog: `, allconfigs.loaded)
-	}, [allconfigs])
-
-	useEffect(() => {
-		setAreBoth(isJSON && isXML)
-	}, [isJSON, isXML])
-
-	useEffect(() => {
-		// areBoth ? console.log(`conlog: dexie`,) : console.log(`conlog: NOPE`,)
-		if (!fromDB) {
-			db.insert({
-				json: JSONfile,
-				xml: XMLfile
-			})
+		if (exists.JSON && exists.XML && config.status==="FILE") {
+			db.insert(config)
 		}
 		getall()
+	}, [exists])
+	
+	useEffect(() => {
+		setConfig({...config, json:fileJSON, xml: fileXML})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [areBoth])
-	// #endregion 
+	}, [fileJSON, fileXML])
 
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-				<Button size="sm" p={0} colorScheme="blue">
+				<Button size="sm" p={0} colorScheme="blue" /* onClick={checkdata} */>
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
 				<input {...uploader} id="filePicker" style={{ visibility: "hidden" }} type={"file"} />
@@ -118,9 +96,9 @@ const Chooser = () => {
 			</Box>
 			{ allconfigs.loaded		// check if allconfigs.loaded === true
 				? allconfigs.configs.length > 0		// if allconfigs.loaded is true, check if allconfigs.configs has any entries
-					? allconfigs.configs.map((x) => {		// if allconfigs.configs has entries
+					? allconfigs.configs.map((item) => {		// if allconfigs.configs has entries
 						return (
-							<Card key={x.id} props={x} />
+							<Card key={item.id} item={item} />
 						)
 						// return x.id
 					})
@@ -139,29 +117,27 @@ const Chooser = () => {
 }
 
 const Card = (props) => {
-	const [data, setData] = useState(props.props)
+	const [item, setItem] = useState(props.item)
 
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	const [options, setOptions] = useRecoilState(xmlobj)
-	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+	const [config, setConfig] = useRecoilState(configState)
+	const exists = useRecoilValue(existState)
 
 	const doLoad = async (e) => {
 		e.preventDefault()
-		let ret = await db.read(data.id);
-		console.log(`conlog: `, ret)
-		setFromDB(true)
-		setOptions(ret.options)
-		setXMLfile(ret.xml)
-		setJSONfile(ret.json)
+		let fromDB = await db.read(item.id);
+		console.log(`conlog: `, fromDB)
+		setConfig({
+			...fromDB,
+			status: "DATABASE",
+		})
 	}
 
 	useEffect(() => {
-		const dt = new Date(data.date)
-		setData({
-			...data,
+		// console.log(`conlog: `, exists)
+		const dt = new Date(item.date)
+		setItem({
+			...item,
 			carddate: dt.toDateString(),
-			// cardtime: `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`
 			cardtime: `${dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`
 		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -175,7 +151,7 @@ const Card = (props) => {
 			</HStack>
 			<Divider mt={2} mb={2} />
 			<Flex>
-				<Text>(id: {data.id}) {data.carddate} - {data.cardtime}</Text>
+				<Text>(id: {item.id}) {item.carddate} - {item.cardtime}</Text>
 				<Spacer />
 				<Button size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>

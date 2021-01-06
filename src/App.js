@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from "recoil"
-import { chkJSON, chkXML } from "./recoil/selectors";
+
+import { existState } from "./recoil/selectors";
 
 import Chooser from "./components/Chooser"
 import Show from "./components/Show"
@@ -17,14 +18,7 @@ import {
 import { QuestionIcon, LockIcon, EditIcon, CopyIcon } from '@chakra-ui/icons'
 
 function App() {
-	const [areBoth, setAreBoth] = useState(false)
-
-	const isJSON = useRecoilValue(chkJSON)
-	const isXML = useRecoilValue(chkXML)
-
-	useEffect(() => {
-		setAreBoth(isJSON && isXML)
-	}, [isJSON, isXML])
+	const exists = useRecoilValue(existState)
 
 	return (
 		<Container maxW="900px">
@@ -38,7 +32,7 @@ function App() {
 					<TabList>
 						<Tab><CopyIcon />&nbsp;Chooser</Tab>
 						{
-							areBoth
+							exists.JSON && exists.XML
 								? <Tab><EditIcon />&nbsp;Editor</Tab>
 								: <Tab isDisabled color="silver"><LockIcon color="red.500" />&nbsp;Editor</Tab>
 						}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
-import { jsonobj, xmlobj } from "../../recoil/atoms"
-// import { chkJSON, chkXML } from "../recoil/selectors";
+import { configState } from "../../recoil/atoms"
+import { getJSON, getXML } from "../../recoil/selectors";
 
 // import { useUploader } from 'react-files-hooks';
 // import db from "../data/db"
@@ -28,10 +28,13 @@ const EditorItem = (props) => {
 		return arr.fill(true, 0)
 	})
 
-	const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
-	const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
-	// const [options, setOptions] = useRecoilState(xmlobj)
-	const [fromDB, setFromDB] = useRecoilState(xmlobj)
+	const JSONfile = useRecoilValue(getJSON)
+	const XMLfile = useRecoilValue(getXML)
+	const [config, setConfig] = useRecoilState(configState)
+	// const [JSONfile, setJSONfile] = useRecoilState(jsonobj)
+	// const [XMLfile, setXMLfile] = useRecoilState(xmlobj)
+	// // const [options, setOptions] = useRecoilState(xmlobj)
+	// const [fromDB, setFromDB] = useRecoilState(xmlobj)
 
 	const toggleRow = position => {
 		setIsDisabled(() => {
@@ -53,17 +56,6 @@ const EditorItem = (props) => {
 		e.preventDefault()
 		setTheKey(e.target.value)
 	}
-	useEffect(() => {
-		let newXML
-		if (isDisabled[index]) {
-			// if unchecked
-			newXML = item.perform(XMLfile, theKey)	//true
-		} else {
-			// checked
-			newXML = item.revert(XMLfile, theKey)	//false 
-		}
-		setXMLfile(newXML)
-	}, [theKey])
 
 	return (
 		<Tr key={item.checkbox}>

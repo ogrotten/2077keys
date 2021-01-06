@@ -1,33 +1,35 @@
 import { selector } from "recoil";
-import { jsonobj, xmlobj } from "./atoms"
+import { configState } from "./atoms"
 
-export const chkJSON = selector({
-	key: "chkJSON",
-	get: ({get}) => {
-		const json = get(jsonobj);
-		// console.log(`conlog: `, json)
-		if (json.data !== null) return true;
-		return false
-	},
-});
-
-export const chkXML = selector({
-	key: "chkXML",
+export const getJSON = selector({
+	key: "getJSON",
 	get: ({ get }) => {
-		const xml = get(xmlobj);
-		// console.log(`conlog: `, xml)
-		if (xml !== "") return true;
-		return false
+		return get(configState).json;
 	},
 });
 
-// stump
-// export const dbStore = selector({
-// 	key: "dbStore",
-// 	get: async ({ get }) => {
-// 		const response = await myDBQuery({
-// 			userID: get(currentUserIDState),
-// 		});
-// 		return response.name;
-// 	},
+export const getXML = selector({
+	key: "getXML",
+	get: ({ get }) => {
+		return get(configState).xml;
+	},
+});
+
+export const existState = selector({
+	key: "existState",
+	get: ({ get }) => {
+		// const JSON = get(configState).json
+		// const XML = get(configState).xml
+		return {
+			JSON: Object.keys(get(configState).json).length === 0 ? false : true,
+			XML: get(configState).xml.length === 0 ? false : true
+		}
+	}
+})
+
+// export const uploadState = selector({
+// 	key: "uploadState",
+// 	get: ({get}) =>{
+// 		return get(configState).status
+// 	}
 // })
