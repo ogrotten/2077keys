@@ -33,7 +33,6 @@ const Chooser = () => {
 
 	const { uploader } = useUploader({
 		onSelectFile: incoming => {
-			// console.log(`Chooser.js 20: `,incoming[0]);
 			const fileReader = new FileReader();
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
@@ -44,18 +43,11 @@ const Chooser = () => {
 				} else if (config.status === "ONE") {
 					status = "FILE"
 				}
-
-				// if (current.includes('"version": 65')) setJSONfile(JSON.parse(current))
-				// if (current.includes('xml version="1.0"')) {
-
-
 				if (current.includes('"version": 65')) {
 					setFileJSON(current)
-					// setConfig({ ...config, json: JSON.parse(current), status, date })
 				} else if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
 						setFileXML(current)
-						// setConfig({ ...config, xml: current, status })
 					} else {
 						console.error(`XML UPLOAD: Wrong XML file.\n\n`)
 					}
@@ -89,15 +81,6 @@ const Chooser = () => {
 		setConfig({...config, json:fileJSON, xml: fileXML})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fileJSON, fileXML])
-
-	useEffect(() => {
-		console.log(`conlog: `, config)
-	}, [config])
-
-	// const checkdata = (e) => {
-	// 	// e.preventDefault()
-	// 	console.log(`conlog: `, config)
-	// }
 
 	return (
 		<Container>
