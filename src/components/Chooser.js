@@ -35,16 +35,16 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				let status
-				if (config.status === "") {
-					status = "ONE" 
-				} else if (config.status === "ONE") {
-					status = "FILE"
-				}
+				let status, date = new Date()
+				// if (config.status === "") {
+				// 	status = "ONE" 
+				// } else if (config.status === "ONE") {
+				// 	status = "FILE"
+				// }
 				if (current.includes('"version": 65')) {
-					setConfig({ ...config, json: JSON.parse(current), status })
-				}
-				if (current.includes('xml version="1.0"')) {
+					setConfig({ ...config, json: JSON.parse(current)})
+					// setConfig({ ...config, json: JSON.parse(current), status, date })
+				} else if (current.includes('xml version="1.0"')) {
 					if (current.includes("<!-- MAPPINGS -->")) {
 						setConfig({ ...config, xml: current, status })
 					} else {
@@ -70,17 +70,22 @@ const Chooser = () => {
 	}
 
 	useEffect(() => {
-		// if (exists.JSON && exists.XML && config.status==="FILE") {
+		if (exists.JSON && exists.XML && config.status==="FILE") {
 			db.insert(config)
-		// }
+		}
 		getall()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [exists])
 
+	const checkdata = (e) => {
+		// e.preventDefault()
+		console.log(`conlog: `, config)
+	}
+
 	return (
 		<Container>
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
-				<Button size="sm" p={0} colorScheme="blue">
+				<Button size="sm" p={0} colorScheme="blue" onClick={checkdata}>
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
 				</Button>
 				{
