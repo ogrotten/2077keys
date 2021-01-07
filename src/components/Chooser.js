@@ -93,6 +93,10 @@ const Chooser = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fileJSON, fileXML])
 
+	useEffect(() => {
+		getall()
+	}, [])
+
 
 
 	return (
@@ -148,6 +152,7 @@ const Card = (props) => {
 
 	const doTrash = async () => {
 		console.log(`conlog: Yes. Delete.`, )
+		db.delete(item.id)
 		onClose()
 	}
 
@@ -178,17 +183,18 @@ const Card = (props) => {
 			<Modal closeOnOverlayClick={true} closeOnEsc={true} isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Modal Title</ModalHeader>
+					<ModalHeader>(id: {item.id}) {item.carddate} - {item.cardtime}</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text>checking</Text>
+						<Text><b>Are you sure you want to Delete this stored config?</b></Text>
+						<Text>This will not modify the game.</Text>
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme="blue" mr={3} onClick={doTrash}>
-							Close
+						<Button colorScheme="red" mr={3} onClick={doTrash}>
+							Delete
             			</Button>
-						<Button variant="ghost">Secondary Action</Button>
+						<Button variant="outline" onClick={onClose}>Cancel</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
