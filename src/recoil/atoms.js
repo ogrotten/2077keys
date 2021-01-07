@@ -6,7 +6,6 @@ export const configState = atom({
 		options: [],
 		json: {},
 		xml: "",
-		status: ""
 	},
 });
 

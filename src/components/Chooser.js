@@ -26,7 +26,7 @@ const Chooser = () => {
 
 	const [fileJSON, setFileJSON] = useState({})
 	const [fileXML, setFileXML] = useState("")
-	
+
 	const exists = useRecoilValue(existState)
 
 	const resetConfig = useResetRecoilState(configState);
@@ -39,7 +39,7 @@ const Chooser = () => {
 				const current = e.target.result
 				let status, date = new Date()
 				if (config.status === "") {
-					status = "ONE" 
+					status = "ONE"
 				} else if (config.status === "ONE") {
 					status = "FILE"
 				}
@@ -71,19 +71,30 @@ const Chooser = () => {
 	}
 
 	useEffect(() => {
-		if (exists.JSON && exists.XML && config.status==="FILE") {
+		const uploadState = () => {
+			if (config.status === "DATABASE") return "DATABASE"
+			
+			console.log(`conlog: changing upload status`,)
+			if (exists.JSON && exists.XML) return "COMPLETE"
+			if (exists.JSON || exists.XML) return "ONE"
+			return "NONE"
+		}
+
+		if (exists.JSON && exists.XML && uploadState() === "COMPLETE") {
 			db.insert(config)
 		}
 		getall()
 	}, [exists])
-	
+
 	useEffect(() => {
-		setConfig({...config, json:fileJSON, xml: fileXML})
+		setConfig({ ...config, json: fileJSON, xml: fileXML })
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fileJSON, fileXML])
 
+
+
 	return (
-		<Container>
+		<Container>{/* console.log(`conlog: `, uploadState()) */}
 			<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
 				<Button size="sm" p={0} colorScheme="blue" /* onClick={checkdata} */>
 					<label style={{ lineHeight: "32px", width: "126px", cursor: 'pointer' }} htmlFor="filePicker">Upload Config...</label>
