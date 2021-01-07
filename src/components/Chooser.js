@@ -18,7 +18,7 @@ import {
 	Text,
 } from "@chakra-ui/react"
 
-import { ViewIcon } from '@chakra-ui/icons'
+import { DeleteIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
@@ -74,13 +74,12 @@ const Chooser = () => {
 		const uploadState = () => {
 			if (config.status === "DATABASE") return "DATABASE"
 			
-			console.log(`conlog: changing upload status`,)
 			if (exists.JSON && exists.XML) return "COMPLETE"
 			if (exists.JSON || exists.XML) return "ONE"
 			return "NONE"
 		}
 
-		if (exists.JSON && exists.XML && uploadState() === "COMPLETE") {
+		if (uploadState() === "COMPLETE") {
 			db.insert(config)
 		}
 		getall()
@@ -143,6 +142,10 @@ const Card = (props) => {
 		})
 	}
 
+	const doTrash = async () => {
+
+	}
+
 	useEffect(() => {
 		// console.log(`conlog: `, exists)
 		const dt = new Date(item.date)
@@ -164,7 +167,8 @@ const Card = (props) => {
 			<Flex>
 				<Text>(id: {item.id}) {item.carddate} - {item.cardtime}</Text>
 				<Spacer />
-				<Button size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
+				<Button ml={1} size="xs" colorScheme="red" onClick={doTrash}><DeleteIcon /></Button>
+				<Button ml={1} size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>
 		</Box>
 	)
