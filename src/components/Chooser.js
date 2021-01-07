@@ -13,9 +13,12 @@ import {
 	Divider,
 	Flex, Spacer,
 	HStack,
+	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
 	Spinner,
 	Tag,
 	Text,
+
+	useDisclosure,
 } from "@chakra-ui/react"
 
 import { DeleteIcon } from '@chakra-ui/icons'
@@ -73,7 +76,7 @@ const Chooser = () => {
 	useEffect(() => {
 		const uploadState = () => {
 			if (config.status === "DATABASE") return "DATABASE"
-			
+
 			if (exists.JSON && exists.XML) return "COMPLETE"
 			if (exists.JSON || exists.XML) return "ONE"
 			return "NONE"
@@ -130,7 +133,8 @@ const Card = (props) => {
 	const [item, setItem] = useState(props.item)
 
 	const [config, setConfig] = useRecoilState(configState)
-	const exists = useRecoilValue(existState)
+
+	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const doLoad = async (e) => {
 		e.preventDefault()
@@ -143,7 +147,8 @@ const Card = (props) => {
 	}
 
 	const doTrash = async () => {
-
+		console.log(`conlog: Yes. Delete.`, )
+		onClose()
 	}
 
 	useEffect(() => {
@@ -167,9 +172,26 @@ const Card = (props) => {
 			<Flex>
 				<Text>(id: {item.id}) {item.carddate} - {item.cardtime}</Text>
 				<Spacer />
-				<Button ml={1} size="xs" colorScheme="red" onClick={doTrash}><DeleteIcon /></Button>
+				<Button ml={1} size="xs" colorScheme="red" onClick={onOpen}><DeleteIcon /></Button>
 				<Button ml={1} size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>
+			<Modal closeOnOverlayClick={true} closeOnEsc={true} isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Modal Title</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Text>checking</Text>
+					</ModalBody>
+
+					<ModalFooter>
+						<Button colorScheme="blue" mr={3} onClick={doTrash}>
+							Close
+            			</Button>
+						<Button variant="ghost">Secondary Action</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	)
 }
