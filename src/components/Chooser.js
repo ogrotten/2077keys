@@ -13,19 +13,22 @@ import {
 	Divider,
 	Flex, Spacer,
 	HStack,
+	Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
 	Spinner,
 	Tag,
 	Text,
+
+	useDisclosure,
 } from "@chakra-ui/react"
 
-import { ViewIcon } from '@chakra-ui/icons'
+import { DeleteIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
-	const [config, setConfig] = useRecoilState(configState)
-
 	const [fileJSON, setFileJSON] = useState({})
 	const [fileXML, setFileXML] = useState("")
+
+	const [config, setConfig] = useRecoilState(configState)
 
 	const exists = useRecoilValue(existState)
 
@@ -73,14 +76,13 @@ const Chooser = () => {
 	useEffect(() => {
 		const uploadState = () => {
 			if (config.status === "DATABASE") return "DATABASE"
-			
-			console.log(`conlog: changing upload status`,)
+
 			if (exists.JSON && exists.XML) return "COMPLETE"
 			if (exists.JSON || exists.XML) return "ONE"
 			return "NONE"
 		}
 
-		if (exists.JSON && exists.XML && uploadState() === "COMPLETE") {
+		if (uploadState() === "COMPLETE") {
 			db.insert(config)
 		}
 		getall()
@@ -90,6 +92,10 @@ const Chooser = () => {
 		setConfig({ ...config, json: fileJSON, xml: fileXML })
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fileJSON, fileXML])
+
+	useEffect(() => {
+		getall()
+	}, [])
 
 
 
@@ -130,8 +136,12 @@ const Chooser = () => {
 const Card = (props) => {
 	const [item, setItem] = useState(props.item)
 
+	// workaround for not triggering a rerender
+	const [deleted, setDeleted] = useState(false)
+
 	const [config, setConfig] = useRecoilState(configState)
-	const exists = useRecoilValue(existState)
+
+	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const doLoad = async (e) => {
 		e.preventDefault()
@@ -141,6 +151,15 @@ const Card = (props) => {
 			...fromDB,
 			status: "DATABASE",
 		})
+	}
+
+	const doTrash = async () => {
+		console.log(`conlog: Yes. Delete.`,)
+		db.delete(item.id)
+		onClose()
+
+		// workaround for not triggering a rerender
+		setDeleted(true)
 	}
 
 	useEffect(() => {
@@ -155,7 +174,12 @@ const Card = (props) => {
 	}, [])
 
 	return (
-		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
+		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg"
+			overflow="hidden"
+
+			// workaround for not triggering a rerender
+			display={deleted ? "none" : "block"}
+		>
 			<HStack spacing={2}>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">option</Tag>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">array</Tag>
@@ -164,8 +188,27 @@ const Card = (props) => {
 			<Flex>
 				<Text>(id: {item.id}) {item.carddate} - {item.cardtime}</Text>
 				<Spacer />
-				<Button size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
+				<Button ml={1} size="xs" colorScheme="red" onClick={onOpen}><DeleteIcon /></Button>
+				<Button ml={1} size="xs" colorScheme="blue" onClick={doLoad}>Open</Button>
 			</Flex>
+			<Modal closeOnOverlayClick={true} closeOnEsc={true} isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>(id: {item.id}) {item.carddate} - {item.cardtime}</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Text><b>Are you sure you want to Delete this stored config?</b></Text>
+						<Text>This will not modify the game.</Text>
+					</ModalBody>
+
+					<ModalFooter>
+						<Button colorScheme="red" mr={3} onClick={doTrash}>
+							Delete
+            			</Button>
+						<Button variant="outline" onClick={onClose}>Cancel</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	)
 }
