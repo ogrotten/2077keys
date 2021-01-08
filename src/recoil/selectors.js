@@ -27,9 +27,7 @@ export const existState = selector({
 	}
 })
 
-// export const uploadState = selector({
-// 	key: "uploadState",
-// 	get: ({get}) =>{
-// 		return get(configState).status
-// 	}
-// })
+
+// getall() into recoilstate here
+// list modifications happen to that list
+// onListChange() will then trigger rerender of consumers

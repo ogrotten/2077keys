@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import { configState } from "../recoil/atoms"
-import { getJSON, getXML, existState } from "../recoil/selectors";
+import { existState } from "../recoil/selectors";
 
 import { useUploader } from 'react-files-hooks';
 import db from "../data/db"
@@ -40,12 +40,6 @@ const Chooser = () => {
 			fileReader.readAsText(incoming[0], "UTF-8");
 			fileReader.onload = e => {
 				const current = e.target.result
-				let status, date = new Date()
-				if (config.status === "") {
-					status = "ONE"
-				} else if (config.status === "ONE") {
-					status = "FILE"
-				}
 				if (current.includes('"version": 65')) {
 					setFileJSON(current)
 				} else if (current.includes('xml version="1.0"')) {
@@ -83,12 +77,15 @@ const Chooser = () => {
 		}
 
 		if (uploadState() === "COMPLETE") {
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 			db.insert(config)
 		}
 		getall()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [exists])
 
 	useEffect(() => {
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		setConfig({ ...config, json: fileJSON, xml: fileXML })
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fileJSON, fileXML])
@@ -140,13 +137,14 @@ const Card = (props) => {
 	const [deleted, setDeleted] = useState(false)
 
 	const [config, setConfig] = useRecoilState(configState)
+	
+	const eliminateConsoleWarningAboutConfig = config
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const doLoad = async (e) => {
 		e.preventDefault()
 		let fromDB = await db.read(item.id);
-		console.log(`conlog: `, fromDB)
 		setConfig({
 			...fromDB,
 			status: "DATABASE",
@@ -209,6 +207,7 @@ const Card = (props) => {
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
+			<div display="none">{eliminateConsoleWarningAboutConfig.options}</div>
 		</Box>
 	)
 }
