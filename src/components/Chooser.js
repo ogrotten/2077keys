@@ -25,10 +25,10 @@ import { DeleteIcon } from '@chakra-ui/icons'
 
 const Chooser = () => {
 	const [allconfigs, setAllconfigs] = useState({ loaded: false, configs: [] })
-	const [config, setConfig] = useRecoilState(configState)
-
 	const [fileJSON, setFileJSON] = useState({})
 	const [fileXML, setFileXML] = useState("")
+
+	const [config, setConfig] = useRecoilState(configState)
 
 	const exists = useRecoilValue(existState)
 
@@ -136,6 +136,9 @@ const Chooser = () => {
 const Card = (props) => {
 	const [item, setItem] = useState(props.item)
 
+	// workaround for not triggering a rerender
+	const [deleted, setDeleted] = useState(false)
+
 	const [config, setConfig] = useRecoilState(configState)
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
@@ -151,9 +154,12 @@ const Card = (props) => {
 	}
 
 	const doTrash = async () => {
-		console.log(`conlog: Yes. Delete.`, )
+		console.log(`conlog: Yes. Delete.`,)
 		db.delete(item.id)
 		onClose()
+
+		// workaround for not triggering a rerender
+		setDeleted(true)
 	}
 
 	useEffect(() => {
@@ -168,7 +174,12 @@ const Card = (props) => {
 	}, [])
 
 	return (
-		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg" overflow="hidden">
+		<Box fontSize="sm" mt={3} p={2} borderWidth="1px" borderRadius="lg"
+			overflow="hidden"
+
+			// workaround for not triggering a rerender
+			display={deleted ? "none" : "block"}
+		>
 			<HStack spacing={2}>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">option</Tag>
 				<Tag variant="subtle" colorScheme="cyan" size="sm">array</Tag>
